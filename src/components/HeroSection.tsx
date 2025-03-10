@@ -39,7 +39,16 @@ interface HeroSectionProps {
 
 const HeroSection: React.FC<HeroSectionProps> = ({ movie, tmdbDetails, onBookTickets, allMovies }) => {
   const [showDetails, setShowDetails] = useState(false);
+  const [showShowtimes, setShowShowtimes] = useState(false);
   const [fadeIn, setFadeIn] = useState(false);
+  const [awards, setAwards] = useState<OmdbAwards>({ awards: null, loading: true, error: null });
+  const [ratings, setRatings] = useState<OmdbRatings>({
+    imdb: { rating: null, votes: null },
+    rottenTomatoes: null,
+    metacritic: null,
+    loading: true,
+    error: null
+  });
 
   const logoPath = findPreferredLogo(tmdbDetails);
   const backdropUrl = getMovieBackdrop(tmdbDetails.backdrop_path);
@@ -51,6 +60,35 @@ const HeroSection: React.FC<HeroSectionProps> = ({ movie, tmdbDetails, onBookTic
     }, 50);
     return () => clearTimeout(timer);
   }, [movie.id]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (tmdbDetails.imdb_id) {
+        setAwards({ awards: null, loading: true, error: null });
+        setRatings({
+          imdb: { rating: null, votes: null },
+          rottenTomatoes: null,
+          metacritic: null,
+          loading: true,
+          error: null
+        });
+
+        const [awardsData, ratingsData] = await Promise.all([
+          getMovieAwards(tmdbDetails.imdb_id),
+          getMovieRatings(
+            tmdbDetails.imdb_id,
+            tmdbDetails.title,
+            tmdbDetails.release_date ? new Date(tmdbDetails.release_date).getFullYear().toString() : undefined
+          )
+        ]);
+
+        setAwards(awardsData);
+        setRatings(ratingsData);
+      }
+    };
+
+    fetchData();
+  }, [tmdbDetails.imdb_id]);
 
   const handleAwardsClick = () => {
     if (tmdbDetails.title) {
@@ -98,15 +136,16 @@ const HeroSection: React.FC<HeroSectionProps> = ({ movie, tmdbDetails, onBookTic
             </div>
             <div className="flex flex-col gap-6 max-w-lg">
               <div className="flex flex-wrap items-start gap-4">
-                <button
-                  onClick={handleAwardsClick}
-                  className="px-6 py-3 bg-white/10 text-white font-semibold rounded-lg hover:bg-white/20 transition-colors"
-                >
-                  <span className="flex items-center gap-2">
-                    <Award className="w-5 h-5" />
-                    Premi su MUBI
-                  </span>
-                </button>
+                {awards.awards && (
+                  <button
+                    onClick={handleAwardsClick}
+                    className="group flex items-center gap-2 text-gray-300 transition-all duration-300 hover:text-white w-full"
+                  >
+                    <Award className="w-5 h-5 text-yellow-400 shrink-0" />
+                    <span className="text-sm">{awards.awards}</span>
+                    <ExternalLink className="w-4 h-4 opacity-0 -ml-1 transition-all group-hover:opacity-100 group-hover:ml-1 shrink-0" />
+                  </button>
+                )}
               </div>
             </div>
           </div>
