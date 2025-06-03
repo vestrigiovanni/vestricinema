@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-native",
+    "types": ["jest"],
+    "allowJs": true,
+    "noEmit": true
+  },
+  "include": ["app/**/*", "components/**/*", "api/**/*", "store/**/*", "utils/**/*"]
+}
