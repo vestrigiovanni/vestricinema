@@ -1,0 +1,36 @@
+{
+	"items": [
+		{
+			"id": "laptop_15in",
+			"name": "Laptop 15\"",
+			"category": "electronics",
+			"z_eff_base": 14.0,
+			"thickness_multiplier": 1.0,
+			"is_threat": false
+		},
+		{
+			"id": "water_bottle_500ml",
+			"name": "Bottiglia d'acqua 500ml",
+			"category": "organic",
+			"z_eff_base": 7.4,
+			"thickness_multiplier": 1.2,
+			"is_threat": false
+		},
+		{
+			"id": "tshirt_cotton",
+			"name": "Maglietta di cotone",
+			"category": "organic",
+			"z_eff_base": 6.0,
+			"thickness_multiplier": 0.4,
+			"is_threat": false
+		},
+		{
+			"id": "wrench_steel",
+			"name": "Chiave inglese in acciaio",
+			"category": "metal",
+			"z_eff_base": 26.0,
+			"thickness_multiplier": 1.5,
+			"is_threat": true
+		}
+	]
+}
