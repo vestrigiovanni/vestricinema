@@ -1,0 +1,317 @@
+[gd_scene load_steps=10 format=3 uid="uid://opdash0c4xy8"]
+
+[ext_resource type="Script" path="res://scripts/UI/PanelController.gd" id="1_script"]
+
+[sub_resource type="SystemFont" id="mono_font"]
+font_names = PackedStringArray("Menlo", "Courier New", "Consolas", "monospace")
+
+[sub_resource type="StyleBoxFlat" id="sb_panel"]
+bg_color = Color(0.101961, 0.101961, 0.101961, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.2, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="sb_btn_normal"]
+content_margin_left = 10.0
+content_margin_top = 7.0
+content_margin_right = 10.0
+content_margin_bottom = 7.0
+bg_color = Color(0.121569, 0.121569, 0.121569, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.2, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="sb_btn_hover"]
+content_margin_left = 10.0
+content_margin_top = 7.0
+content_margin_right = 10.0
+content_margin_bottom = 7.0
+bg_color = Color(0.164706, 0.164706, 0.164706, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.266667, 0.266667, 0.266667, 1)
+
+[sub_resource type="StyleBoxFlat" id="sb_btn_pressed"]
+content_margin_left = 10.0
+content_margin_top = 7.0
+content_margin_right = 10.0
+content_margin_bottom = 7.0
+bg_color = Color(0.039216, 0.180392, 0.078431, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 1, 0.254902, 1)
+
+[sub_resource type="StyleBoxFlat" id="sb_approve"]
+content_margin_left = 10.0
+content_margin_top = 7.0
+content_margin_right = 10.0
+content_margin_bottom = 7.0
+bg_color = Color(0.101961, 0.290196, 0.101961, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.16, 0.45, 0.16, 1)
+
+[sub_resource type="StyleBoxFlat" id="sb_reject"]
+content_margin_left = 10.0
+content_margin_top = 7.0
+content_margin_right = 10.0
+content_margin_bottom = 7.0
+bg_color = Color(0.290196, 0.101961, 0.101961, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.45, 0.16, 0.16, 1)
+
+[sub_resource type="Theme" id="ui_theme"]
+default_font = SubResource("mono_font")
+default_font_size = 18
+Button/colors/font_color = Color(0.533333, 0.533333, 0.533333, 1)
+Button/colors/font_hover_color = Color(0, 1, 0.254902, 1)
+Button/colors/font_pressed_color = Color(0, 1, 0.254902, 1)
+Button/colors/font_focus_color = Color(0, 1, 0.254902, 1)
+Button/styles/normal = SubResource("sb_btn_normal")
+Button/styles/hover = SubResource("sb_btn_hover")
+Button/styles/pressed = SubResource("sb_btn_pressed")
+Button/styles/focus = SubResource("sb_btn_normal")
+Panel/styles/panel = SubResource("sb_panel")
+
+[node name="OperatorDashboard" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = SubResource("ui_theme")
+script = ExtResource("1_script")
+
+[node name="XRayPlaceholder" type="ColorRect" parent="."]
+unique_name_in_owner = true
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 70.0
+offset_right = -360.0
+offset_bottom = -90.0
+color = Color(0, 0, 0, 1)
+
+[node name="XRayViewLabel" type="Label" parent="XRayPlaceholder"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = -20.0
+offset_right = 120.0
+offset_bottom = 20.0
+theme_override_colors/font_color = Color(0.533333, 0.533333, 0.533333, 1)
+theme_override_font_sizes/font_size = 28
+text = "XRAY  VIEW"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TopPanel" type="Panel" parent="."]
+layout_mode = 1
+anchor_right = 1.0
+offset_bottom = 70.0
+
+[node name="Margin" type="MarginContainer" parent="TopPanel"]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_right = 20
+
+[node name="HBox" type="HBoxContainer" parent="TopPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 48
+
+[node name="Title" type="Label" parent="TopPanel/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 1, 0.254902, 1)
+theme_override_font_sizes/font_size = 22
+text = "XRAY-SIM  //  OPERATOR CONSOLE"
+vertical_alignment = 1
+
+[node name="BeltStatus" type="Label" parent="TopPanel/Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.254902, 0.254902, 1)
+text = "BELT: STOPPED"
+vertical_alignment = 1
+
+[node name="BeltSpeed" type="Label" parent="TopPanel/Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.254902, 1)
+text = "0.0 cm/s"
+vertical_alignment = 1
+
+[node name="InspectionTime" type="Label" parent="TopPanel/Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.254902, 1)
+text = "T+00:00"
+vertical_alignment = 1
+
+[node name="RightPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -360.0
+offset_top = 70.0
+offset_bottom = -90.0
+
+[node name="Margin" type="MarginContainer" parent="RightPanel"]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 18
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 18
+theme_override_constants/margin_bottom = 18
+
+[node name="VBox" type="VBoxContainer" parent="RightPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Header" type="Label" parent="RightPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.254902, 1)
+theme_override_font_sizes/font_size = 20
+text = "──  CONTROLS  ──"
+horizontal_alignment = 1
+
+[node name="ZoomValue" type="Label" parent="RightPanel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.254902, 1)
+text = "ZOOM        1.0x"
+
+[node name="ZoomSlider" type="HSlider" parent="RightPanel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 4.0
+step = 0.1
+value = 1.0
+
+[node name="Sep1" type="HSeparator" parent="RightPanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="BrightnessValue" type="Label" parent="RightPanel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.254902, 1)
+text = "BRIGHTNESS  1.00"
+
+[node name="BrightnessSlider" type="HSlider" parent="RightPanel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 0.5
+max_value = 2.0
+step = 0.01
+value = 1.0
+
+[node name="Sep2" type="HSeparator" parent="RightPanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="OrganicButton" type="Button" parent="RightPanel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+text = "ORGANIC ONLY"
+
+[node name="MetalButton" type="Button" parent="RightPanel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+text = "METAL ONLY"
+
+[node name="InvertButton" type="Button" parent="RightPanel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+text = "INVERT B&W"
+
+[node name="Sep3" type="HSeparator" parent="RightPanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="IcmoreButton" type="Button" parent="RightPanel/Margin/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+toggle_mode = true
+text = "iCMORE: OFF"
+
+[node name="BottomPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -90.0
+
+[node name="Margin" type="MarginContainer" parent="BottomPanel"]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 14
+
+[node name="HBox" type="HBoxContainer" parent="BottomPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="ApproveButton" type="Button" parent="BottomPanel/Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+theme_override_colors/font_color = Color(0.6, 1, 0.6, 1)
+theme_override_colors/font_hover_color = Color(0.75, 1, 0.75, 1)
+theme_override_colors/font_pressed_color = Color(0.75, 1, 0.75, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("sb_approve")
+theme_override_styles/hover = SubResource("sb_approve")
+theme_override_styles/pressed = SubResource("sb_approve")
+theme_override_styles/focus = SubResource("sb_approve")
+text = "APPROVA"
+
+[node name="RejectButton" type="Button" parent="BottomPanel/Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+theme_override_colors/font_color = Color(1, 0.6, 0.6, 1)
+theme_override_colors/font_hover_color = Color(1, 0.75, 0.75, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.75, 0.75, 1)
+theme_override_font_sizes/font_size = 22
+theme_override_styles/normal = SubResource("sb_reject")
+theme_override_styles/hover = SubResource("sb_reject")
+theme_override_styles/pressed = SubResource("sb_reject")
+theme_override_styles/focus = SubResource("sb_reject")
+text = "RESPINGI"
+
+[node name="TipIndicator" type="Button" parent="BottomPanel/Margin/HBox"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+disabled = true
+theme_override_colors/font_color_disabled = Color(0.533333, 0.533333, 0.533333, 1)
+theme_override_styles/disabled = SubResource("sb_btn_normal")
+text = "T.I.P. ACTIVE"

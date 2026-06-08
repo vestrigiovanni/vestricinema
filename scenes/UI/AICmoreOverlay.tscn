@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://aicmore0p6xy1"]
+
+[ext_resource type="Script" path="res://scripts/Gameplay/AICmoreOverlay.gd" id="1_script"]
+
+[node name="AICmoreOverlay" type="Node2D"]
+script = ExtResource("1_script")

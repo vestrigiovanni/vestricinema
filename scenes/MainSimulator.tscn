@@ -1,0 +1,73 @@
+[gd_scene load_steps=9 format=3 uid="uid://mainsim0p6xy0"]
+
+[ext_resource type="Script" path="res://scripts/ConveyorController.gd" id="1_conveyor"]
+[ext_resource type="Shader" path="res://shaders/xray_colormap.gdshader" id="2_colormap"]
+[ext_resource type="PackedScene" uid="uid://aicmore0p6xy1" path="res://scenes/UI/AICmoreOverlay.tscn" id="3_icmore"]
+[ext_resource type="PackedScene" uid="uid://opdash0c4xy8" path="res://scenes/UI/OperatorDashboard.tscn" id="4_dash"]
+[ext_resource type="PackedScene" uid="uid://scfeed0p6xy2" path="res://scenes/UI/ScoreFeedback.tscn" id="5_feedback"]
+[ext_resource type="Shader" path="res://shaders/scanlines.gdshader" id="6_scanlines"]
+
+[sub_resource type="ShaderMaterial" id="mat_colormap"]
+shader = ExtResource("2_colormap")
+shader_parameter/beam_intensity = 1.0
+shader_parameter/zoom_level = 1.0
+shader_parameter/enable_organic_only = false
+shader_parameter/enable_metal_only = false
+shader_parameter/invert_image = false
+
+[sub_resource type="ShaderMaterial" id="mat_scanlines"]
+shader = ExtResource("6_scanlines")
+shader_parameter/line_spacing = 4.0
+shader_parameter/line_opacity = 0.10
+shader_parameter/vignette_strength = 0.20
+
+[node name="MainSimulator" type="Node2D"]
+
+[node name="BlackBackground" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0, 0, 0, 1)
+
+[node name="Conveyor" type="Node2D" parent="."]
+script = ExtResource("1_conveyor")
+belt_speed = 200.0
+spawn_interval = 3.0
+auto_spawn = true
+inspection_x = 780.0
+
+[node name="SpawnPoint" type="Marker2D" parent="Conveyor"]
+position = Vector2(-200, 520)
+
+[node name="DespawnPoint" type="Marker2D" parent="Conveyor"]
+position = Vector2(2120, 520)
+
+[node name="ColorMapPass" type="Node2D" parent="."]
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="ColorMapPass"]
+copy_mode = 2
+
+[node name="ColorMap" type="ColorRect" parent="ColorMapPass"]
+material = SubResource("mat_colormap")
+offset_right = 1920.0
+offset_bottom = 1080.0
+
+[node name="AICmoreOverlay" parent="." instance=ExtResource("3_icmore")]
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="ScanlineOverlay" type="ColorRect" parent="UILayer"]
+material = SubResource("mat_scanlines")
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 70.0
+offset_right = -360.0
+offset_bottom = -90.0
+mouse_filter = 2
+color = Color(1, 1, 1, 1)
+
+[node name="OperatorDashboard" parent="UILayer" instance=ExtResource("4_dash")]
+colormap_node = NodePath("../../ColorMapPass/ColorMap")
+conveyor_node = NodePath("../../Conveyor")
+icmore_overlay_node = NodePath("../../AICmoreOverlay")
+
+[node name="ScoreFeedback" parent="UILayer" instance=ExtResource("5_feedback")]

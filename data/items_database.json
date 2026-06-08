@@ -31,6 +31,54 @@
 			"z_eff_base": 26.0,
 			"thickness_multiplier": 1.5,
 			"is_threat": true
+		},
+		{
+			"id": "shoes_leather",
+			"name": "Scarpe in pelle",
+			"category": "organic",
+			"z_eff_base": 7.5,
+			"thickness_multiplier": 1.0,
+			"is_threat": false
+		},
+		{
+			"id": "phone_smartphone",
+			"name": "Smartphone",
+			"category": "electronics",
+			"z_eff_base": 13.0,
+			"thickness_multiplier": 0.8,
+			"is_threat": false
+		},
+		{
+			"id": "knife_kitchen",
+			"name": "Coltello da cucina",
+			"category": "metal",
+			"z_eff_base": 24.0,
+			"thickness_multiplier": 1.3,
+			"is_threat": true
+		},
+		{
+			"id": "book_paperback",
+			"name": "Libro tascabile",
+			"category": "organic",
+			"z_eff_base": 6.5,
+			"thickness_multiplier": 1.4,
+			"is_threat": false
+		},
+		{
+			"id": "cable_usb",
+			"name": "Cavo USB",
+			"category": "mixed",
+			"z_eff_base": 12.0,
+			"thickness_multiplier": 0.5,
+			"is_threat": false
+		},
+		{
+			"id": "scissors_metal",
+			"name": "Forbici in metallo",
+			"category": "metal",
+			"z_eff_base": 22.0,
+			"thickness_multiplier": 0.9,
+			"is_threat": true
 		}
 	]
 }

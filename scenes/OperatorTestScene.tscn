@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://optest0d5xy2"]
+
+[ext_resource type="PackedScene" uid="uid://14usy0dc2lfv" path="res://scenes/XRayScannerViewport.tscn" id="1_xray"]
+[ext_resource type="PackedScene" uid="uid://opdash0c4xy8" path="res://scenes/UI/OperatorDashboard.tscn" id="2_dash"]
+
+[node name="OperatorTestScene" type="Node2D"]
+
+[node name="XRayScannerViewport" parent="." instance=ExtResource("1_xray")]
+
+[node name="OperatorDashboard" parent="." instance=ExtResource("2_dash")]
+colormap_node = NodePath("../XRayScannerViewport/ColorMapPass/ColorMap")

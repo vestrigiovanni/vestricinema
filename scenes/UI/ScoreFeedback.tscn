@@ -1,0 +1,71 @@
+[gd_scene load_steps=5 format=3 uid="uid://scfeed0p6xy2"]
+
+[ext_resource type="Script" path="res://scripts/UI/ScoreFeedback.gd" id="1_script"]
+
+[sub_resource type="SystemFont" id="mono_font"]
+font_names = PackedStringArray("Menlo", "Courier New", "Consolas", "monospace")
+
+[sub_resource type="StyleBoxFlat" id="sb_popup"]
+content_margin_left = 40.0
+content_margin_top = 28.0
+content_margin_right = 40.0
+content_margin_bottom = 28.0
+bg_color = Color(0.101961, 0.101961, 0.101961, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.25, 0.25, 0.25, 1)
+
+[sub_resource type="Theme" id="fb_theme"]
+default_font = SubResource("mono_font")
+
+[node name="ScoreFeedback" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme = SubResource("fb_theme")
+script = ExtResource("1_script")
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Popup" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("sb_popup")
+
+[node name="VBox" type="VBoxContainer" parent="Center/Popup"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="OutcomeLabel" type="Label" parent="Center/Popup/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.254902, 1)
+theme_override_font_sizes/font_size = 44
+text = "✓ CLEARED"
+horizontal_alignment = 1
+
+[node name="DetailLabel" type="Label" parent="Center/Popup/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.78, 0.78, 0.78, 1)
+theme_override_font_sizes/font_size = 22
+text = "OGGETTO: -"
+horizontal_alignment = 1
+
+[node name="CountersLabel" type="Label" parent="Center/Popup/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.55, 0.55, 1)
+theme_override_font_sizes/font_size = 18
+text = "CORRETTI: 0  |  FALSI ALLARMI: 0  |  MINACCE MANCATE: 0"
+horizontal_alignment = 1

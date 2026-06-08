@@ -24,8 +24,21 @@ render_mode blend_mix;
 // Assorbimento accumulato (via BackBufferCopy prima di questo pass).
 uniform sampler2D screen_tex : hint_screen_texture, repeat_disable, filter_nearest;
 
-// Intensita' del fascio I0 (luminosita' del vuoto). Esposta per la futura UI.
+// Intensita' del fascio I0 (luminosita' del vuoto). Esposta alla UI operatore.
 uniform float beam_intensity : hint_range(0.0, 2.0) = 1.0;
+
+// --- Controlli operatore (Fase 4) -------------------------------------------
+// Zoom: ingrandisce campionando una regione piu' piccola attorno al centro
+// dell'immagine e stirandola sull'intero ColorRect.
+uniform float zoom_level : hint_range(1.0, 4.0) = 1.0;
+// Filtri materiale, mutuamente esclusivi (gestiti lato UI):
+//   organic_only -> nasconde tutto cio' che ha Z_eff > 10 (misto + metallo);
+//   metal_only   -> mostra SOLO cio' che ha Z_eff > 18 (metallo).
+uniform bool enable_organic_only = false;
+uniform bool enable_metal_only = false;
+// Inversione B/N: il fondo bianco diventa nero e gli oggetti chiari,
+// mantenendo la tinta del falso colore (tipico degli scanner reali).
+uniform bool invert_image = false;
 
 // Z di riferimento delle tre bande di materiale.
 const float Z_ORG   = 7.0;
@@ -45,14 +58,26 @@ vec3 xray_false_color(float zeff) {
 }
 
 void fragment() {
+	// Zoom: campiona attorno al centro (0.5, 0.5) restringendo l'UV.
+	vec2 zoom_uv = (SCREEN_UV - vec2(0.5)) / zoom_level + vec2(0.5);
+
 	// Optical depth accumulato per banda.
-	vec3 acc = texture(screen_tex, SCREEN_UV).rgb;
+	vec3 acc = texture(screen_tex, zoom_uv).rgb;
 
 	float tau_total = acc.r + acc.g + acc.b;
 
 	// Z_eff = media degli Z pesata sull'assorbimento di ciascuna banda.
 	float denom = max(tau_total, 1e-4);
 	float zeff = (acc.r * Z_ORG + acc.g * Z_MIX + acc.b * Z_METAL) / denom;
+
+	// Filtri materiale: azzerano l'assorbimento dei pixel esclusi, cosi'
+	// tornano "vuoto" (sfondo) senza alterare quelli che restano.
+	if (enable_organic_only && zeff > 10.0) {
+		tau_total = 0.0;
+	}
+	if (enable_metal_only && zeff <= 18.0) {
+		tau_total = 0.0;
+	}
 
 	// Beer-Lambert: trasmissione -> luminosita'.
 	float transmission = exp(-tau_total);
@@ -61,6 +86,10 @@ void fragment() {
 	float color_fac = smoothstep(0.0, 0.12, tau_total);
 	vec3 tint = mix(vec3(1.0), xray_false_color(zeff), color_fac);
 
-	vec3 final_color = beam_intensity * tint * transmission;
+	// Luminosita': normale = trasmissione; invertita = 1 - trasmissione
+	// (il vuoto bianco diventa nero, gli oggetti densi diventano chiari).
+	float luminance = invert_image ? (1.0 - transmission) : transmission;
+
+	vec3 final_color = beam_intensity * tint * luminance;
 	COLOR = vec4(final_color, 1.0);
 }

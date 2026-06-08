@@ -10,8 +10,9 @@ config_version=5
 
 [application]
 
-config/name="XRay-Sim"
-run/main_scene="res://scenes/Main.tscn"
+config/name="XRay Simulator"
+config/version="1.0.0"
+run/main_scene="res://scenes/MainSimulator.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 config/run/max_fps=60
@@ -20,11 +21,16 @@ config/run/max_fps=60
 
 DataManager="*res://scripts/Autoload/DataManager.gd"
 GameManager="*res://scripts/Autoload/GameManager.gd"
+EvaluationLogic="*res://scripts/Gameplay/EvaluationLogic.gd"
+SoundManager="*res://scenes/Audio/SoundManager.gd"
+PerformanceMonitor="*res://scripts/Debug/PerformanceMonitor.gd"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
+window/size/resizable=false
+window/vsync/vsync_mode=1
 
 [physics]
 
