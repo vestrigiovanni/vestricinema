@@ -1,0 +1,66 @@
+shader_type canvas_item;
+render_mode blend_mix;
+
+// ============================================================================
+//  X-RAY FALSE-COLOR PASS  (applicato UNA volta, alla fine della catena)
+// ----------------------------------------------------------------------------
+//  Legge l'assorbimento accumulato dai pass di xray_absorption.gdshader
+//  (R/G/B = optical depth di organico / misto / metallo) e produce
+//  l'immagine finale a falsi colori da scanner:
+//
+//   - Luminosita' = legge di Beer-Lambert  exp(-tau_totale):
+//       vuoto      -> 1 (bianco brillante, fascio passa tutto)
+//       molto denso-> 0 (nero, assorbimento totale)
+//     Quindi la DENSITA' (quanto tau) controlla la luminosita'.
+//
+//   - Tinta (falso colore) = numero atomico efficace Z_eff, calcolato come
+//     media degli Z delle bande pesata sul loro assorbimento. La tinta NON
+//     dipende dalla densita', solo dal materiale:
+//       Z_eff < 10  -> arancione/marrone (organico)
+//       10..18      -> verde              (misto)
+//       Z_eff > 18  -> blu/turchese       (metallo pesante)
+// ============================================================================
+
+// Assorbimento accumulato (via BackBufferCopy prima di questo pass).
+uniform sampler2D screen_tex : hint_screen_texture, repeat_disable, filter_nearest;
+
+// Intensita' del fascio I0 (luminosita' del vuoto). Esposta per la futura UI.
+uniform float beam_intensity : hint_range(0.0, 2.0) = 1.0;
+
+// Z di riferimento delle tre bande di materiale.
+const float Z_ORG   = 7.0;
+const float Z_MIX   = 14.0;
+const float Z_METAL = 26.0;
+
+// Mappa Z_eff -> falso colore canonico da scanner aeroportuale.
+vec3 xray_false_color(float zeff) {
+	vec3 organic = vec3(0.95, 0.55, 0.15); // < 10   arancione/marrone
+	vec3 mixed   = vec3(0.25, 0.75, 0.30); // 10..18 verde
+	vec3 metal   = vec3(0.10, 0.45, 0.80); // > 18   blu/turchese
+	float t1 = smoothstep(8.0, 11.0, zeff);  // transizione organico -> misto
+	float t2 = smoothstep(16.0, 19.0, zeff); // transizione misto -> metallo
+	vec3 c = mix(organic, mixed, t1);
+	c = mix(c, metal, t2);
+	return c;
+}
+
+void fragment() {
+	// Optical depth accumulato per banda.
+	vec3 acc = texture(screen_tex, SCREEN_UV).rgb;
+
+	float tau_total = acc.r + acc.g + acc.b;
+
+	// Z_eff = media degli Z pesata sull'assorbimento di ciascuna banda.
+	float denom = max(tau_total, 1e-4);
+	float zeff = (acc.r * Z_ORG + acc.g * Z_MIX + acc.b * Z_METAL) / denom;
+
+	// Beer-Lambert: trasmissione -> luminosita'.
+	float transmission = exp(-tau_total);
+
+	// Il falso colore emerge appena c'e' assorbimento; il vuoto resta bianco.
+	float color_fac = smoothstep(0.0, 0.12, tau_total);
+	vec3 tint = mix(vec3(1.0), xray_false_color(zeff), color_fac);
+
+	vec3 final_color = beam_intensity * tint * transmission;
+	COLOR = vec4(final_color, 1.0);
+}

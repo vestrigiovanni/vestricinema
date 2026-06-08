@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cynrjx1icrahj"]
+
+[ext_resource type="Script" path="res://scripts/TestAsset.gd" id="1_script"]
+
+[node name="TestAsset" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+copy_mode = 2
+
+[node name="Sprite" type="Sprite2D" parent="."]

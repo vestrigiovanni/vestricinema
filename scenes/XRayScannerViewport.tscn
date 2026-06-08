@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://14usy0dc2lfv"]
+
+[ext_resource type="PackedScene" uid="uid://cynrjx1icrahj" path="res://scenes/TestAsset.tscn" id="1_asset"]
+[ext_resource type="Shader" path="res://shaders/xray_colormap.gdshader" id="2_colormap"]
+
+[sub_resource type="ShaderMaterial" id="mat_colormap"]
+shader = ExtResource("2_colormap")
+shader_parameter/beam_intensity = 1.0
+
+[node name="XRayScannerViewport" type="Node2D"]
+
+[node name="BlackBackground" type="ColorRect" parent="."]
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0, 0, 0, 1)
+
+[node name="ObjectA" parent="." instance=ExtResource("1_asset")]
+position = Vector2(840, 520)
+organic_fraction = 1.0
+mixed_fraction = 0.0
+metal_fraction = 0.0
+radius = 150.0
+density = 1.0
+
+[node name="ObjectB" parent="." instance=ExtResource("1_asset")]
+position = Vector2(1060, 580)
+organic_fraction = 0.0
+mixed_fraction = 0.0
+metal_fraction = 1.0
+radius = 150.0
+density = 1.0
+
+[node name="ColorMapPass" type="Node2D" parent="."]
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="ColorMapPass"]
+copy_mode = 2
+
+[node name="ColorMap" type="ColorRect" parent="ColorMapPass"]
+material = SubResource("mat_colormap")
+offset_right = 1920.0
+offset_bottom = 1080.0
