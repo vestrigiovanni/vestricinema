@@ -39,6 +39,10 @@ const C_GREY := Color("333333")
 @onready var _zoom_value: Label = %ZoomValue
 @onready var _brightness_slider: HSlider = %BrightnessSlider
 @onready var _brightness_value: Label = %BrightnessValue
+@onready var _window_slider: HSlider = %WindowSlider
+@onready var _window_value: Label = %WindowValue
+@onready var _level_slider: HSlider = %LevelSlider
+@onready var _level_value: Label = %LevelValue
 @onready var _organic_button: Button = %OrganicButton
 @onready var _metal_button: Button = %MetalButton
 @onready var _invert_button: Button = %InvertButton
@@ -71,6 +75,8 @@ func _ready() -> void:
 	# Allinea shader e label allo stato iniziale dei controlli.
 	_on_zoom_changed(_zoom_slider.value)
 	_on_brightness_changed(_brightness_slider.value)
+	_on_window_changed(_window_slider.value)
+	_on_level_changed(_level_slider.value)
 	_apply_material_filters()
 	_on_invert_toggled(_invert_button.button_pressed)
 
@@ -125,6 +131,8 @@ func _resolve_material() -> void:
 func _connect_signals() -> void:
 	_zoom_slider.value_changed.connect(_on_zoom_changed)
 	_brightness_slider.value_changed.connect(_on_brightness_changed)
+	_window_slider.value_changed.connect(_on_window_changed)
+	_level_slider.value_changed.connect(_on_level_changed)
 	_organic_button.toggled.connect(_on_organic_toggled)
 	_metal_button.toggled.connect(_on_metal_toggled)
 	_invert_button.toggled.connect(_on_invert_toggled)
@@ -231,6 +239,18 @@ func _on_brightness_changed(value: float) -> void:
 	_brightness_value.text = "BRIGHTNESS  %.2f" % value
 	if _mat != null:
 		_mat.set_shader_parameter("beam_intensity", value)
+
+
+func _on_window_changed(value: float) -> void:
+	_window_value.text = "WINDOW      %.2f" % value
+	if _mat != null:
+		_mat.set_shader_parameter("window", value)
+
+
+func _on_level_changed(value: float) -> void:
+	_level_value.text = "LEVEL       %.2f" % value
+	if _mat != null:
+		_mat.set_shader_parameter("level", value)
 
 
 func _on_organic_toggled(pressed: bool) -> void:

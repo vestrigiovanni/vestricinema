@@ -11,8 +11,8 @@ config_version=5
 [application]
 
 config/name="XRay Simulator"
-config/version="1.0.0"
-run/main_scene="res://scenes/MainSimulator.tscn"
+config/version="2.0.0"
+run/main_scene="res://scenes/MainSimulatorV2.tscn"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 config/run/max_fps=60
@@ -30,7 +30,6 @@ PerformanceMonitor="*res://scripts/Debug/PerformanceMonitor.gd"
 window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/size/resizable=false
-window/vsync/vsync_mode=1
 
 [physics]
 

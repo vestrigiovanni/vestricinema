@@ -1,0 +1,228 @@
+[gd_scene load_steps=7 format=3 uid="uid://b9xrymv0lph90"]
+
+[ext_resource type="Script" path="res://scripts/Volumetric/VolumetricSetup.gd" id="1_setup"]
+[ext_resource type="Script" path="res://scripts/Volumetric/VoxelizerManager.gd" id="2_voxelizer"]
+[ext_resource type="Script" path="res://scripts/Volumetric/ArcBallCamera.gd" id="3_camera"]
+[ext_resource type="PackedScene" path="res://scenes/UI/SlicingPanel.tscn" id="4_slice"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_vol"]
+size = Vector3(1, 1, 1)
+
+[sub_resource type="Environment" id="Env_black"]
+background_mode = 1
+background_color = Color(0, 0, 0, 1)
+ambient_light_source = 0
+ambient_light_color = Color(0, 0, 0, 1)
+ambient_light_energy = 0.0
+
+[node name="RaymarchViewport" type="Node3D"]
+script = ExtResource("1_setup")
+
+[node name="Voxelizer" type="Node" parent="."]
+script = ExtResource("2_voxelizer")
+
+[node name="ProxyCube" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_vol")
+
+[node name="ArcBallCamera" type="Camera3D" parent="."]
+transform = Transform3D(0.825, -0.234, 0.515, 0, 0.91, 0.414, -0.565, -0.342, 0.752, 1.55, 1.3, 2.26)
+script = ExtResource("3_camera")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Env_black")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="Panel" parent="UI"]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 392.0
+offset_bottom = 624.0
+
+[node name="AbsorptionLabel" type="Label" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 10.0
+offset_right = 360.0
+offset_bottom = 34.0
+text = "ABSORPTION: 6.0"
+
+[node name="AbsorptionSlider" type="HSlider" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 36.0
+offset_right = 360.0
+offset_bottom = 60.0
+min_value = 0.0
+max_value = 20.0
+step = 0.5
+value = 6.0
+
+[node name="BeamLabel" type="Label" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 70.0
+offset_right = 360.0
+offset_bottom = 94.0
+text = "BEAM: 1.00"
+
+[node name="BeamSlider" type="HSlider" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 96.0
+offset_right = 360.0
+offset_bottom = 120.0
+min_value = 0.0
+max_value = 2.0
+step = 0.05
+value = 1.0
+
+[node name="StepsLabel" type="Label" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 130.0
+offset_right = 360.0
+offset_bottom = 154.0
+text = "MAX STEPS: 256"
+
+[node name="StepsSlider" type="HSlider" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 156.0
+offset_right = 360.0
+offset_bottom = 180.0
+min_value = 16.0
+max_value = 512.0
+step = 16.0
+value = 256.0
+
+[node name="OrganicToggle" type="CheckButton" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 190.0
+offset_right = 360.0
+offset_bottom = 226.0
+text = "ORGANIC ONLY"
+
+[node name="MetalToggle" type="CheckButton" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 230.0
+offset_right = 360.0
+offset_bottom = 266.0
+text = "METAL ONLY"
+
+[node name="InvertToggle" type="CheckButton" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 270.0
+offset_right = 360.0
+offset_bottom = 306.0
+text = "INVERT"
+
+[node name="ScatterLabel" type="Label" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 314.0
+offset_right = 360.0
+offset_bottom = 338.0
+text = "SCATTER: 0.30"
+
+[node name="ScatterSlider" type="HSlider" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 340.0
+offset_right = 360.0
+offset_bottom = 364.0
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 0.3
+
+[node name="ScatterThrLabel" type="Label" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 374.0
+offset_right = 360.0
+offset_bottom = 398.0
+text = "SCATTER THR: 0.40"
+
+[node name="ScatterThrSlider" type="HSlider" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 400.0
+offset_right = 360.0
+offset_bottom = 424.0
+min_value = 0.0
+max_value = 1.0
+step = 0.05
+value = 0.4
+
+[node name="WindowLabel" type="Label" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 434.0
+offset_right = 360.0
+offset_bottom = 458.0
+text = "WINDOW: 1.00"
+
+[node name="WindowSlider" type="HSlider" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 460.0
+offset_right = 360.0
+offset_bottom = 484.0
+min_value = 0.01
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="LevelLabel" type="Label" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 494.0
+offset_right = 360.0
+offset_bottom = 518.0
+text = "LEVEL: 0.50"
+
+[node name="LevelSlider" type="HSlider" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 520.0
+offset_right = 360.0
+offset_bottom = 544.0
+min_value = 0.0
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="ResetButton" type="Button" parent="UI/Panel"]
+offset_left = 16.0
+offset_top = 556.0
+offset_right = 360.0
+offset_bottom = 596.0
+text = "RESET CAMERA"
+
+[node name="FpsLabel" type="Label" parent="UI"]
+offset_left = 1760.0
+offset_top = 16.0
+offset_right = 1900.0
+offset_bottom = 44.0
+text = "FPS: --"
+
+[node name="SlicingPanel" parent="UI" instance=ExtResource("4_slice")]
+offset_left = 1516.0
+offset_top = 60.0
+offset_right = 1896.0
+offset_bottom = 530.0
+
+[node name="SelectedLabel" type="Label" parent="UI"]
+offset_left = 660.0
+offset_top = 16.0
+offset_right = 1480.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(1, 0.95, 0.2, 1)
+theme_override_font_sizes/font_size = 22
+text = "Click su un oggetto per selezionarlo"
+
+[node name="DragLabel" type="Label" parent="UI"]
+visible = false
+offset_left = 660.0
+offset_top = 48.0
+offset_right = 1480.0
+offset_bottom = 76.0
+theme_override_colors/font_color = Color(0, 1, 0.254902, 1)
+theme_override_font_sizes/font_size = 20
+text = "X: 0.0cm  Y: 0.0cm  Z: 0.0cm"
+
+[node name="InstructionsLabel" type="Label" parent="UI"]
+offset_left = 16.0
+offset_top = 1028.0
+offset_right = 1900.0
+offset_bottom = 1060.0
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+theme_override_font_sizes/font_size = 16
+text = "Click: seleziona oggetto  |  Drag oggetto selezionato: sposta  |  Drag sfondo: ruota camera  |  Scroll: zoom / profondità drag  |  R: reset camera"

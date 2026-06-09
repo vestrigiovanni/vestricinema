@@ -1,0 +1,164 @@
+[gd_scene load_steps=6 format=3 uid="uid://c0slicingpanel10"]
+
+[ext_resource type="Script" path="res://scripts/Volumetric/SlicingPanel.gd" id="1_slice"]
+
+[sub_resource type="SystemFont" id="mono_font"]
+font_names = PackedStringArray("Menlo", "Courier New", "Consolas", "monospace")
+
+[sub_resource type="StyleBoxFlat" id="sb_panel"]
+bg_color = Color(0.101961, 0.101961, 0.101961, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.2, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="sb_btn_normal"]
+content_margin_left = 8.0
+content_margin_top = 6.0
+content_margin_right = 8.0
+content_margin_bottom = 6.0
+bg_color = Color(0.121569, 0.121569, 0.121569, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.2, 0.2, 0.2, 1)
+
+[sub_resource type="Theme" id="slice_theme"]
+default_font = SubResource("mono_font")
+default_font_size = 16
+Button/colors/font_color = Color(0.533333, 0.533333, 0.533333, 1)
+Button/colors/font_hover_color = Color(0, 1, 0.254902, 1)
+Button/colors/font_pressed_color = Color(0, 1, 0.254902, 1)
+Button/styles/normal = SubResource("sb_btn_normal")
+Button/styles/pressed = SubResource("sb_btn_normal")
+Label/colors/font_color = Color(0, 1, 0.254902, 1)
+Panel/styles/panel = SubResource("sb_panel")
+
+[node name="SlicingPanel" type="Panel"]
+custom_minimum_size = Vector2(380, 470)
+offset_right = 380.0
+offset_bottom = 470.0
+theme = SubResource("slice_theme")
+script = ExtResource("1_slice")
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="VBox" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="Header" type="Label" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "──  CT SLICING  ──"
+horizontal_alignment = 1
+
+[node name="Sliders" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="SagCol" type="VBoxContainer" parent="Margin/VBox/Sliders"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SagLabel" type="Label" parent="Margin/VBox/Sliders/SagCol"]
+layout_mode = 2
+text = "SAG"
+horizontal_alignment = 1
+
+[node name="SagSlider" type="VSlider" parent="Margin/VBox/Sliders/SagCol"]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+max_value = 1.0
+step = 0.01
+
+[node name="SagSchem" type="Label" parent="Margin/VBox/Sliders/SagCol"]
+layout_mode = 2
+text = "[  off  ]
+----"
+horizontal_alignment = 1
+
+[node name="CorCol" type="VBoxContainer" parent="Margin/VBox/Sliders"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CorLabel" type="Label" parent="Margin/VBox/Sliders/CorCol"]
+layout_mode = 2
+text = "COR"
+horizontal_alignment = 1
+
+[node name="CorSlider" type="VSlider" parent="Margin/VBox/Sliders/CorCol"]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+max_value = 1.0
+step = 0.01
+
+[node name="CorSchem" type="Label" parent="Margin/VBox/Sliders/CorCol"]
+layout_mode = 2
+text = "[  off  ]
+----"
+horizontal_alignment = 1
+
+[node name="AxCol" type="VBoxContainer" parent="Margin/VBox/Sliders"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AxLabel" type="Label" parent="Margin/VBox/Sliders/AxCol"]
+layout_mode = 2
+text = "AX"
+horizontal_alignment = 1
+
+[node name="AxSlider" type="VSlider" parent="Margin/VBox/Sliders/AxCol"]
+custom_minimum_size = Vector2(0, 220)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+max_value = 1.0
+step = 0.01
+
+[node name="AxSchem" type="Label" parent="Margin/VBox/Sliders/AxCol"]
+layout_mode = 2
+text = "[  off  ]
+----"
+horizontal_alignment = 1
+
+[node name="Toggles" type="HBoxContainer" parent="Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SagToggle" type="Button" parent="Margin/VBox/Toggles"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "SAG"
+
+[node name="CorToggle" type="Button" parent="Margin/VBox/Toggles"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "COR"
+
+[node name="AxToggle" type="Button" parent="Margin/VBox/Toggles"]
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "AX"
+
+[node name="ResetButton" type="Button" parent="Margin/VBox"]
+layout_mode = 2
+text = "RESET SLICE"

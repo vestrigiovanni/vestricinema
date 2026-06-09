@@ -38,6 +38,11 @@ var threat_item_id: String = ""
 # dall'AICmoreOverlay per disegnare il bounding box rosso che li segue.
 var threat_nodes: Array = []
 
+# FASE 12 — ricetta finale del bagaglio (post ThreatInjector). Conservata cosi'
+# la stazione di analisi CT può ricostruire gli stessi oggetti in 3D quando
+# l'operatore ferma il nastro su questo bagaglio.
+var contents: Array = []
+
 
 func _ready() -> void:
 	add_to_group("baggage")
@@ -52,6 +57,7 @@ func _ready() -> void:
 ## ciascun elemento ha { item_id, position, rotation, scale }.
 func populate(items_data: Array) -> void:
 	threat_nodes.clear()
+	contents = items_data.duplicate(true)  # ricetta per la stazione CT (Fase 12)
 	for entry in items_data:
 		var item_id: String = String(entry.get("item_id", ""))
 		var item: Dictionary = DataManager.get_item(item_id)

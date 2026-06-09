@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://w638fvcr650j"
+path="res://.godot/imported/voxelizer.glsl-48c77ab94cb0eaf31f15599cead549f2.res"
+
+[deps]
+
+source_file="res://compute/voxelizer.glsl"
+dest_files=["res://.godot/imported/voxelizer.glsl-48c77ab94cb0eaf31f15599cead549f2.res"]
+
+[params]
+

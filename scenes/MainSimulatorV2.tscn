@@ -1,0 +1,202 @@
+[gd_scene load_steps=11 format=3 uid="uid://mainsimv2p6xy0"]
+
+[ext_resource type="Script" path="res://scripts/UI/SimulatorV2.gd" id="1_sim"]
+[ext_resource type="Script" path="res://scripts/ConveyorController.gd" id="2_conveyor"]
+[ext_resource type="Shader" path="res://shaders/xray_colormap.gdshader" id="3_colormap"]
+[ext_resource type="PackedScene" uid="uid://aicmore0p6xy1" path="res://scenes/UI/AICmoreOverlay.tscn" id="4_icmore"]
+[ext_resource type="PackedScene" uid="uid://b9xrymv0lph90" path="res://scenes/Volumetric/RaymarchViewport.tscn" id="5_raymarch"]
+[ext_resource type="Script" path="res://scripts/UI/InspectorPanelV2.gd" id="6_panel"]
+[ext_resource type="Script" path="res://scripts/UI/BeltStripV2.gd" id="7_belt"]
+[ext_resource type="PackedScene" uid="uid://scfeed0p6xy2" path="res://scenes/UI/ScoreFeedback.tscn" id="8_feedback"]
+
+[sub_resource type="ShaderMaterial" id="mat_colormap"]
+shader = ExtResource("3_colormap")
+shader_parameter/beam_intensity = 1.0
+shader_parameter/zoom_level = 1.0
+shader_parameter/enable_organic_only = false
+shader_parameter/enable_metal_only = false
+shader_parameter/invert_image = false
+shader_parameter/window = 1.0
+shader_parameter/level = 0.5
+
+[sub_resource type="SystemFont" id="mono_font"]
+font_names = PackedStringArray("Menlo", "Courier New", "Consolas", "monospace")
+
+[node name="MainSimulatorV2" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_sim")
+
+[node name="Bg" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 1080.0
+color = Color(0, 0, 0, 1)
+
+[node name="Central" type="Control" parent="."]
+layout_mode = 0
+offset_top = 80.0
+offset_right = 1400.0
+offset_bottom = 980.0
+
+[node name="ScanContainer" type="SubViewportContainer" parent="Central"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+stretch = true
+
+[node name="ScanViewport" type="SubViewport" parent="Central/ScanContainer"]
+handle_input_locally = false
+size = Vector2i(1400, 900)
+render_target_update_mode = 4
+
+[node name="BlackBackground" type="ColorRect" parent="Central/ScanContainer/ScanViewport"]
+offset_right = 1400.0
+offset_bottom = 900.0
+color = Color(0, 0, 0, 1)
+
+[node name="Conveyor" type="Node2D" parent="Central/ScanContainer/ScanViewport"]
+script = ExtResource("2_conveyor")
+belt_speed = 200.0
+spawn_interval = 3.0
+auto_spawn = true
+inspection_x = 700.0
+
+[node name="SpawnPoint" type="Marker2D" parent="Central/ScanContainer/ScanViewport/Conveyor"]
+position = Vector2(-150, 440)
+
+[node name="DespawnPoint" type="Marker2D" parent="Central/ScanContainer/ScanViewport/Conveyor"]
+position = Vector2(1550, 440)
+
+[node name="ColorMapPass" type="Node2D" parent="Central/ScanContainer/ScanViewport"]
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="Central/ScanContainer/ScanViewport/ColorMapPass"]
+copy_mode = 2
+
+[node name="ColorMap" type="ColorRect" parent="Central/ScanContainer/ScanViewport/ColorMapPass"]
+material = SubResource("mat_colormap")
+offset_right = 1400.0
+offset_bottom = 900.0
+
+[node name="AICmoreOverlay" parent="Central/ScanContainer/ScanViewport" instance=ExtResource("4_icmore")]
+
+[node name="InspectContainer" type="SubViewportContainer" parent="Central"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+stretch = true
+
+[node name="InspectViewport" type="SubViewport" parent="Central/InspectContainer"]
+size = Vector2i(1400, 900)
+render_target_update_mode = 4
+
+[node name="InspectView" parent="Central/InspectContainer/InspectViewport" instance=ExtResource("5_raymarch")]
+auto_test_baggage = false
+show_builtin_ui = false
+
+[node name="LoadingScreen" type="Control" parent="."]
+visible = false
+layout_mode = 0
+offset_top = 80.0
+offset_right = 1400.0
+offset_bottom = 980.0
+
+[node name="LoadingBg" type="ColorRect" parent="LoadingScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 1)
+
+[node name="Center" type="CenterContainer" parent="LoadingScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Label" type="Label" parent="LoadingScreen/Center"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.254902, 1)
+theme_override_fonts/font = SubResource("mono_font")
+theme_override_font_sizes/font_size = 32
+text = "ANALISI CT IN CORSO"
+
+[node name="UILayer" type="CanvasLayer" parent="."]
+
+[node name="Header" type="Panel" parent="UILayer"]
+offset_right = 1920.0
+offset_bottom = 80.0
+
+[node name="Margin" type="MarginContainer" parent="UILayer/Header"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_right = 24
+
+[node name="HBox" type="HBoxContainer" parent="UILayer/Header/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 48
+
+[node name="Title" type="Label" parent="UILayer/Header/Margin/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 1, 0.254902, 1)
+theme_override_fonts/font = SubResource("mono_font")
+theme_override_font_sizes/font_size = 22
+text = "XRAY-SIM v2.0  //  CT ANALYSIS STATION"
+vertical_alignment = 1
+
+[node name="BeltStatus" type="Label" parent="UILayer/Header/Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.254902, 1)
+theme_override_fonts/font = SubResource("mono_font")
+text = "BELT: RUNNING"
+vertical_alignment = 1
+
+[node name="BeltSpeed" type="Label" parent="UILayer/Header/Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.254902, 1)
+theme_override_fonts/font = SubResource("mono_font")
+text = "0.0 cm/s"
+vertical_alignment = 1
+
+[node name="InspectionTime" type="Label" parent="UILayer/Header/Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.254902, 1)
+theme_override_fonts/font = SubResource("mono_font")
+text = "T+00:00"
+vertical_alignment = 1
+
+[node name="Clock" type="Label" parent="UILayer/Header/Margin/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 1, 0.254902, 1)
+theme_override_fonts/font = SubResource("mono_font")
+text = "00:00:00"
+vertical_alignment = 1
+
+[node name="InspectorPanel" type="PanelContainer" parent="UILayer"]
+offset_left = 1400.0
+offset_top = 80.0
+offset_right = 1920.0
+offset_bottom = 980.0
+script = ExtResource("6_panel")
+
+[node name="BeltStrip" type="Control" parent="UILayer"]
+offset_top = 980.0
+offset_right = 1400.0
+offset_bottom = 1060.0
+script = ExtResource("7_belt")
+
+[node name="ScoreFeedback" parent="UILayer" instance=ExtResource("8_feedback")]

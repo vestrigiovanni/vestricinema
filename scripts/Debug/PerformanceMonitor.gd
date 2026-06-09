@@ -14,6 +14,14 @@ extends CanvasLayer
 var _label: Label
 var _enabled: bool = false
 
+# FASE 12 — LOD corrente della stazione CT (aggiornato dal controller v2.0).
+var lod_text: String = "128³ / steps 256"
+
+
+## Aggiorna la stringa LOD mostrata nel monitor (chiamata dal SimulatorV2).
+func set_lod_text(t: String) -> void:
+	lod_text = t
+
 
 func _ready() -> void:
 	layer = 128 # sopra tutto
@@ -57,9 +65,10 @@ func _process(_delta: float) -> void:
 	var tree := get_tree()
 	var baggage := tree.get_nodes_in_group("baggage").size()
 	var mem_mb := OS.get_static_memory_usage() / (1024.0 * 1024.0)
-	_label.text = "FPS:      %d\nNODI:     %d\nMEM:      %.1f MB\nBAGAGLI:  %d" % [
+	_label.text = "FPS:      %d\nNODI:     %d\nMEM:      %.1f MB\nBAGAGLI:  %d\nLOD:      %s" % [
 		Engine.get_frames_per_second(),
 		tree.get_node_count(),
 		mem_mb,
 		baggage,
+		lod_text,
 	]

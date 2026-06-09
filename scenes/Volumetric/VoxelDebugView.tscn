@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/Volumetric/VoxelDebugView.gd" id="1_view"]
+[ext_resource type="Script" path="res://scripts/Volumetric/VoxelizerManager.gd" id="2_voxelizer"]
+[ext_resource type="Script" path="res://scripts/Volumetric/OrbitCamera.gd" id="3_camera"]
+
+[node name="VoxelDebugView" type="Node3D"]
+script = ExtResource("1_view")
+
+[node name="Voxelizer" type="Node" parent="."]
+script = ExtResource("2_voxelizer")
+
+[node name="VoxelCloud" type="MeshInstance3D" parent="."]
+
+[node name="OrbitCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 2.3)
+script = ExtResource("3_camera")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="InfoLabel" type="Label" parent="UI"]
+offset_left = 16.0
+offset_top = 12.0
+offset_right = 900.0
+offset_bottom = 40.0
+text = "Voxel occupati: -- / 2097152"
+
+[node name="SliceLabel" type="Label" parent="UI"]
+offset_left = 16.0
+offset_top = 980.0
+offset_right = 120.0
+offset_bottom = 1008.0
+text = "SLICE Z"
+
+[node name="SliceSlider" type="HSlider" parent="UI"]
+offset_left = 110.0
+offset_top = 984.0
+offset_right = 610.0
+offset_bottom = 1016.0
+min_value = 0.0
+max_value = 127.0
+step = 1.0
+value = 0.0
+
+[node name="RegenButton" type="Button" parent="UI"]
+offset_left = 1760.0
+offset_top = 12.0
+offset_right = 1900.0
+offset_bottom = 52.0
+text = "RIGENERA"

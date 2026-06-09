@@ -40,6 +40,13 @@ uniform bool enable_metal_only = false;
 // mantenendo la tinta del falso colore (tipico degli scanner reali).
 uniform bool invert_image = false;
 
+// --- Window / Level (Fase 11) -----------------------------------------------
+// Equalizzazione stile Hounsfield. window = ampiezza finestra di contrasto;
+// level = livello di attenuazione al centro (alto -> isola i metalli). Ai default
+// (window 1.0, level 0.5) e' l'identita': l'immagine resta come in Fase 4.
+uniform float window : hint_range(0.01, 1.0) = 1.0;
+uniform float level  : hint_range(0.0, 1.0) = 0.5;
+
 // Z di riferimento delle tre bande di materiale.
 const float Z_ORG   = 7.0;
 const float Z_MIX   = 14.0;
@@ -82,13 +89,21 @@ void fragment() {
 	// Beer-Lambert: trasmissione -> luminosita'.
 	float transmission = exp(-tau_total);
 
+	// Window / Level (Fase 11): rimappa la trasmissione con finestra soft. level
+	// alto -> centro su trasmissioni basse (alta attenuazione) = isola i metalli.
+	float windowed = transmission;
+	if (window < 0.999 || abs(level - 0.5) > 0.001) {
+		float center = 1.0 - level;
+		windowed = smoothstep(center - window * 0.5, center + window * 0.5, transmission);
+	}
+
 	// Il falso colore emerge appena c'e' assorbimento; il vuoto resta bianco.
 	float color_fac = smoothstep(0.0, 0.12, tau_total);
 	vec3 tint = mix(vec3(1.0), xray_false_color(zeff), color_fac);
 
 	// Luminosita': normale = trasmissione; invertita = 1 - trasmissione
 	// (il vuoto bianco diventa nero, gli oggetti densi diventano chiari).
-	float luminance = invert_image ? (1.0 - transmission) : transmission;
+	float luminance = invert_image ? (1.0 - windowed) : windowed;
 
 	vec3 final_color = beam_intensity * tint * luminance;
 	COLOR = vec4(final_color, 1.0);
